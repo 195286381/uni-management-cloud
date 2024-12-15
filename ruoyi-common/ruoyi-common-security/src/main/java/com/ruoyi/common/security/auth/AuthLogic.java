@@ -69,7 +69,9 @@ public class AuthLogic
      */
     public LoginUser getLoginUser()
     {
+        // 首先拿到token. 具体怎么拿的, 就是从请求头中拿到的
         String token = SecurityUtils.getToken();
+        // 如果请求头没有token, 则肯定是有问题的.
         if (token == null)
         {
             throw new NotLoginException("未提供token");

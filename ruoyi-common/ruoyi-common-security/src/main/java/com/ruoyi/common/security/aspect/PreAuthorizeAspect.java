@@ -53,8 +53,9 @@ public class PreAuthorizeAspect
     @Around("pointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        // 注解鉴权
+        // 注解鉴权 (这里需要转换为方法签名✍️)
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        // 检查方法注解. 在这里进行鉴权的逻辑处理.
         checkMethodAnnotation(signature.getMethod());
         try
         {
@@ -74,6 +75,7 @@ public class PreAuthorizeAspect
     public void checkMethodAnnotation(Method method)
     {
         // 校验 @RequiresLogin 注解
+        // step1: 这里判断是否登录, 如果登录了则放行, 否则抛出异常.
         RequiresLogin requiresLogin = method.getAnnotation(RequiresLogin.class);
         if (requiresLogin != null)
         {
@@ -81,6 +83,7 @@ public class PreAuthorizeAspect
         }
 
         // 校验 @RequiresRoles 注解
+        // step2: 这里判读是否有角色权限.
         RequiresRoles requiresRoles = method.getAnnotation(RequiresRoles.class);
         if (requiresRoles != null)
         {

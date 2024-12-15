@@ -1,0 +1,1 @@
+Springboot启动器扫描类配置.
