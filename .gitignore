@@ -45,9 +45,8 @@ nbdist/
 !*/build/*.html
 !*/build/*.xml
 
-############
+######################################################################
 # docker相关
-###########
 /docker/mysql/data/
 /docker/mysql/logs
 /docker/nacos/logs

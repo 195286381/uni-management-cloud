@@ -1,5 +1,6 @@
 version : '3.8'
 services:
+# 中间件
   ruoyi-nacos:
     container_name: ruoyi-nacos
     image: nacos/nacos-server
@@ -64,6 +65,31 @@ services:
       - ruoyi-gateway
     links:
       - ruoyi-gateway
+  seata-server:
+    container_name: seata-server
+    image: seataio/seata-server:1.5.2
+    depends_on:
+      - ruoyi-mysql
+    links:
+      - ruoyi-mysql
+    ports:
+      - "7091:7091"
+      - "8091:8091"
+#    environment:
+#      - STORE_MODE=db
+#      # 以SEATA_IP作为host注册seata server
+#      - SEATA_IP=192.168.1.224
+#      - SEATA_PORT=8091
+    volumes:
+#      - "/usr/share/zoneinfo/Asia/Shanghai:/etc/localtime"        #设置系统时区
+#      - "/usr/share/zoneinfo/Asia/Shanghai:/etc/timezone"  #设置时区
+      # 假设我们通过docker cp命令把资源文件拷贝到相对路径`/home/data/soft/seata/conf`中
+      # 如有问题，请阅读上面的[注意事项]以及[使用自定义配置文件]
+      - ./seata/conf/application.yml:/seata-server/resources/application.yml
+
+
+
+# 应用服务
   ruoyi-gateway:
     container_name: ruoyi-gateway
     build:
@@ -137,3 +163,12 @@ services:
       dockerfile: dockerfile
     ports:
       - "9100:9100"
+  ruoyi-modules-test:
+    container_name: ruoyi-modules-test
+    build:
+      context: ./ruoyi/modules/test
+      dockerfile: dockerfile
+    ports:
+      - "9300:9300"
+    volumes:
+      - ./ruoyi/uploadPath:/home/ruoyi/uploadPath

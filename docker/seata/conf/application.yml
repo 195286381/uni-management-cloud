@@ -1,0 +1,44 @@
+server:
+  port: 7091
+spring:
+  application:
+    name: seata-server
+logging:
+  #config: classpath:logback-spring.xml
+  file:
+    path: ${user.home}/logs/seata
+
+console:
+  user:
+    username: seata
+    password: seata
+
+seata:
+  config:
+    # support: nacos, consul, apollo, zk, etcd3
+    type: nacos
+    nacos:
+      server-addr: ruoyi-nacos:8848 # Nacos服务器的地址和端口
+      namespace: "" # 如果使用的是默认命名空间，可以不填写或者用空字符串代替
+      group: "DEFAULT_GROUP"
+      username: "nacos" # 如果Nacos没有启用密码保护，可以不填写或者用默认的用户名
+      password: "" # 如果Nacos没有启用密码保护，可以不填写或者用默认的密码
+      data-id: seata-server.yml
+  registry:
+    # support: nacos, eureka, redis, zk, consul, etcd3, sofa
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: ruoyi-nacos:8848
+      group: DEFAULT_GROUP
+      #      namespace:
+      cluster: default
+  #      username: nacos
+  #      password: nacos
+  # server:
+  #    service-port: 8091 #If not configured, the default is '${server.port} + 1000'
+  security:
+    secretKey: SeataSecretKey0c382ef121d778043159209298fd40bf3850a017
+    tokenValidityInMilliseconds: 1800000
+    ignore:
+      urls: /,/**/*.css,/**/*.js,/**/*.html,/**/*.map,/**/*.svg,/**/*.png,/**/*.ico,/console-fe/public/**,/api/v1/auth/login
