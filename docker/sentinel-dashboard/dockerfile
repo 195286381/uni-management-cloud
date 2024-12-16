@@ -1,0 +1,14 @@
+# 基础镜像
+FROM  openjdk:8-jre
+MAINTAINER <xzzzzz> <195286381@qq.com>
+# 创建文件夹
+RUN mkdir /sentinel-dashboard
+COPY sentinel-dashboard-1.8.5.jar /sentinel-dashboard/
+WORKDIR /sentinel-dashboard
+# 暴露 8718 8719端口
+EXPOSE 8718 8719
+CMD java -Dserver.port=8718 \
+    -Dcsp.sentinel.dashboard.server=localhost:8718 \
+    -Dproject.name=sentinel-dashboard \
+    -Dcsp.sentinel.api.port.port=8719 \
+    -jar sentinel-dashboard-1.8.5.jar
