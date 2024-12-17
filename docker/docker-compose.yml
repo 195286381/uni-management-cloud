@@ -96,6 +96,31 @@ services:
       # 如有问题，请阅读上面的[注意事项]以及[使用自定义配置文件]
       - ./seata/conf/application.yml:/seata-server/resources/application.yml
 
+# 安装链路追踪的工具.
+  skywalking-oap:
+    image: apache/skywalking-oap-server:8.9.0
+    container_name: skywalking-oap
+    ports:
+      - "11800:11800"
+      - "12800:12800"
+    environment:
+      - TZ=Asia/Shanghai
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:12800/health_check" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  skywalking-ui:
+    image: apache/skywalking-ui:8.9.0
+    container_name: skywalking-ui
+    depends_on:
+      - skywalking-oap
+    ports:
+      - "18080:8080"
+    environment:
+      - TZ=Asia/Shanghai
+      - SW_OAP_ADDRESS=oap:12800
 
 
 # 应用服务
